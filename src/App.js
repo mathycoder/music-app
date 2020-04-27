@@ -1,5 +1,6 @@
 import React from 'react'
 import DemoContainer from './containers/DemoContainer'
+import MusicNotationContainer from './containers/MusicNotationContainer'
 import './App.css'
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
       </header>
       <body style={styles.containerDiv}>
         <DemoContainer />
-        <div style={styles.bottomDiv}>hi</div>
+        <MusicNotationContainer />
       </body>
     </div>
   );
@@ -20,10 +21,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     height: '100vh'
-  },
-  bottomDiv: {
-    flex: 1,
-    backgroundColor: 'rgb(95,95,95)'
   }
 }
 
