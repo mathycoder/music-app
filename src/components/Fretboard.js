@@ -3,14 +3,22 @@ import './css/fretboard.css'
 
 const Fretboard = () => {
   const [overFret, setOverFret] = useState({string: null, fret: null})
-  const NOTES = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
-  const STRINGS = ['E', 'B', 'G', 'D', 'A', 'E']
+  const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+  const STRING_INDICES = [41, 35, 31, 26, 21, 16]
+
+// E2, A2, D3, G3, B3, E4
+// C1 = 0
+// C2 = 12
+// C3 = 24
+// C4 = 36
+
 
   const currentNote = () => {
     if (!overFret) return null
-    const stringIndex= NOTES.indexOf(STRINGS[overFret.string])
-    const fretIndex = (stringIndex + overFret.fret) % 12
-    return NOTES[fretIndex]
+    const rawStringIndex= STRING_INDICES[overFret.string]
+    const fretIndex = (rawStringIndex + overFret.fret) % 12
+    const octave = Math.floor((rawStringIndex + overFret.fret) / 12) + 1
+    return `${NOTES[fretIndex]}${octave}`
   }
 
   return (
