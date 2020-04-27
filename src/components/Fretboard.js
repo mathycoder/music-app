@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import './css/fretboard.css'
 import * as Tone from 'tone'
+import { connect } from 'react-redux'
+import { setCurrentNote } from '../actions/currentNoteActions.js'
 
-const Fretboard = () => {
+const Fretboard = ({ setCurrentNote }) => {
   const [overFret, setOverFret] = useState({string: null, fret: null})
   const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
   const STRING_INDICES = [41, 35, 31, 26, 21, 16]
@@ -22,6 +24,12 @@ const Fretboard = () => {
     return `${NOTES[fretIndex]}${withOctave ? octave : ''}`
   }
 
+  const clickNote = () => {
+    const currNote = currentNote(true)
+    synth.triggerAttackRelease(currNote, '8n')
+    setCurrentNote(currNote)
+  }
+
   return (
     <div className="fretboard-wrapper noselect">
       {[0,1,2,3,4,5].map(stringNum => (
@@ -31,7 +39,7 @@ const Fretboard = () => {
               onMouseEnter={() => setOverFret({string: stringNum, fret: fretNum})}
               onMouseLeave={() => setOverFret({string: null, fret: null})}
               className={`fret ${fretNum === 0 ? 'base' : null}`}
-              onClick={() => synth.triggerAttackRelease(currentNote(true), '8n')}
+              onClick={() => clickNote()}
             >
               {overFret.string === stringNum && overFret.fret === fretNum
                 ? <div className="note">
@@ -49,4 +57,10 @@ const Fretboard = () => {
   )
 }
 
-export default Fretboard
+const mapDispatchToProps = dispatch => {
+  return {
+    setCurrentNote: note => dispatch(setCurrentNote(note))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Fretboard)

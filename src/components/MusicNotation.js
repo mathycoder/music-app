@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import Vex from 'vexflow'
+import { connect } from 'react-redux'
 
 const MusicNotation = () => {
   const vf = useRef()
@@ -23,4 +24,4 @@ const MusicNotation = () => {
   )
 }
 
-export default MusicNotation
+export default connect(null, null)(MusicNotation)
