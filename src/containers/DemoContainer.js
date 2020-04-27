@@ -1,14 +1,24 @@
 import React from 'react'
-import './css/demo-styles.css'
+import Fretboard from '../components/Fretboard'
+import * as Tone from 'tone'
 
 const DemoContainer = () => {
+  const synth = new Tone.Synth().toMaster();
+
   return (
-    <div className="demo-wrapper">
-      <div className="note">C</div>
-      <div className="note">D</div>
-      <div className="note">E</div>
+    <div style={styles.demoWrapper}>
+      <Fretboard />
     </div>
   )
+}
+
+const styles = {
+  demoWrapper: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  }
 }
 
 export default DemoContainer
