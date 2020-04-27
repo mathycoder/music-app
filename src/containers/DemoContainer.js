@@ -17,7 +17,8 @@ const styles = {
     flex: 1,
     display: 'flex',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: '20px'
   }
 }
 
