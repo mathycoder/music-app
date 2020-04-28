@@ -7,6 +7,7 @@ const MusicNotation = ({ currentNote }) => {
   const rendererRef = useRef(null)
   const contextRef = useRef(null)
   const staveRef = useRef(null)
+  const firstRef = useRef(false)
 
   useEffect(() => {
     const div = document.getElementById("music-canvas")
@@ -18,15 +19,38 @@ const MusicNotation = ({ currentNote }) => {
     staveRef.current.setContext(contextRef.current).draw();
   }, [])
 
+  useEffect(() => {
+    if (currentNote) renderNote(currentNote)
+  }, [currentNote])
+
 
   const deleteNote = () => {
     contextRef.current.svg.removeChild(contextRef.current.svg.lastChild)
   }
 
-  const renderNote = () => {
-    const notes = [
-      new VF.StaveNote({clef: "treble", keys: ["c/4"], duration: 'w'})
-    ]
+  const renderNote = (note="c/4") => {
+    let accidental = false
+    !firstRef.current ? firstRef.current = true : deleteNote()
+
+    if (note !== "c/4") {
+      const key = note.split(/[0-9]/)[0]
+      const octaveIndex = note.search(/[0-9]/)
+      const octave = note[octaveIndex]
+      note = `${key}/${octave}`
+      if (key[1]) accidental = true
+    }
+
+
+    const notes = accidental ?
+      [
+        new VF.StaveNote({clef: "treble", keys: [note], duration: 'w'}).
+        addAccidental(0, new VF.Accidental("#"))
+      ]
+      :
+      [
+        new VF.StaveNote({clef: "treble", keys: [note], duration: 'w'})
+      ]
+
     const voice = new VF.Voice({num_beats: 4,  beat_value: 4});
     voice.addTickables(notes)
     const formatter = new VF.Formatter().joinVoices([voice]).format([voice], 400)
