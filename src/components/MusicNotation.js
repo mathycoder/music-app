@@ -1,43 +1,49 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import Vex from 'vexflow'
 import { connect } from 'react-redux'
 
 const MusicNotation = ({ currentNote }) => {
-  const vf = useRef()
-  const score = useRef()
-  const system = useRef()
-  const notesRef = useRef('C#5/w')
+  const [VF, setVF] = useState(Vex.Flow)
+  const rendererRef = useRef(null)
+  const contextRef = useRef(null)
+  const staveRef = useRef(null)
 
   useEffect(() => {
-    vf.current = new Vex.Flow.Factory({renderer: {elementId: 'music-canvas'}});
-    score.current = vf.current.EasyScore();
-    system.current = vf.current.System();
-
-    system.current.addStave({
-      voices: [score.current.voice(score.current.notes(notesRef.current))]
-    }).addClef('treble').addTimeSignature('4/4');
-
-    vf.current.draw();
+    const div = document.getElementById("music-canvas")
+    rendererRef.current = new VF.Renderer(div, VF.Renderer.Backends.SVG)
+    contextRef.current = rendererRef.current.getContext()
+    rendererRef.current.resize(600,250)
+    staveRef.current = new VF.Stave(40, 0, 500);
+    staveRef.current.addClef("treble").addTimeSignature("4/4");
+    staveRef.current.setContext(contextRef.current).draw();
   }, [])
 
-  useEffect(() => {
-    if (currentNote){
-      vf.current = new Vex.Flow.Factory({renderer: {elementId: 'music-canvas'}});
-      score.current = vf.current.EasyScore();
-      system.current = vf.current.System();
-
-      notesRef.current = `${currentNote}/w`
-      system.current.addStave({
-        voices: [score.current.voice(score.current.notes(notesRef.current))]
-      }).addClef('treble').addTimeSignature('4/4');
-
-      vf.current.draw();
-    }
-  }, [currentNote])
-
   return (
-    <div id="music-canvas"></div>
+    <>
+      <div id="music-canvas" style={styles.canvasStyle}></div>
+      <div
+        style={styles.rightStyle}
+        onClick={() => contextRef.current.svg.removeChild(contextRef.current.svg.lastChild)}
+        >
+        <button>Do Things</button>
+      </div>
+    </>
   )
+}
+
+const styles = {
+  canvasStyle: {
+    flex: 1,
+    alignSelf: 'stretch',
+  },
+  rightStyle: {
+    flex: 1,
+    display: 'flex',
+    backgroundColor: 'gray',
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 }
 
 const mapStateToProps = state => {
