@@ -18,12 +18,27 @@ const MusicNotation = ({ currentNote }) => {
     staveRef.current.setContext(contextRef.current).draw();
   }, [])
 
+
+  const deleteNote = () => {
+    contextRef.current.svg.removeChild(contextRef.current.svg.lastChild)
+  }
+
+  const renderNote = () => {
+    const notes = [
+      new VF.StaveNote({clef: "treble", keys: ["c/4"], duration: 'w'})
+    ]
+    const voice = new VF.Voice({num_beats: 4,  beat_value: 4});
+    voice.addTickables(notes)
+    const formatter = new VF.Formatter().joinVoices([voice]).format([voice], 400)
+    voice.draw(contextRef.current, staveRef.current)
+  }
+
   return (
     <>
       <div id="music-canvas" style={styles.canvasStyle}></div>
       <div
         style={styles.rightStyle}
-        onClick={() => contextRef.current.svg.removeChild(contextRef.current.svg.lastChild)}
+        onClick={() => renderNote()}
         >
         <button>Do Things</button>
       </div>
