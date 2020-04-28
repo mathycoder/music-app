@@ -7,7 +7,7 @@ import { setCurrentNote } from '../actions/currentNoteActions.js'
 const Fretboard = ({ setCurrentNote }) => {
   const [overFret, setOverFret] = useState({string: null, fret: null})
   const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-  const STRING_INDICES = [41, 35, 31, 26, 21, 16]
+  const STRING_INDICES = [40, 35, 31, 26, 21, 16]
   const synth = new Tone.Synth().toMaster();
 
 // E2, A2, D3, G3, B3, E4
